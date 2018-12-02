@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>Document</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/redux/3.6.0/redux.js"></script>
+  <script>
+  const INCREMENT = "INCREMENT";
+  const DECREMENT = "DECREMENT";
+  const increment = (diff) => ({
+  type: INCREMENT,
+  diff: diff
+  });
+  const decrement = (diff) => ({
+  type: DECREMENT,
+  diff: diff
+  });
+
+  const initalState = {
+  number: 1,
+  foo: 'bar',
+  baz: 'qux'
+  }
+
+  function counter(state = initalState, action) {
+  switch(action.type) {
+    case INCREMENT:
+      return {
+        ...state,
+        number: state.number + action.diff
+      };
+    case DECREMENT:
+      return {
+        ...state,
+        number: state.number - action.diff
+      };
+    default:
+      return state;
+  }
+  }
+
+  const {createStore} = Redux;
+  const store = createStore(counter);
+
+  const unsubscribe = store.subscribe(() => {
+  console.log(store.getState());
+  });
+
+  //unsubscribe();
+  function fnOnload() {
+    store.dispatch(increment(1));
+    store.dispatch(decrement(5));
+    store.dispatch(increment(10));
+  }
+
+
+
+  </script>
+ </head>
+ <body onLoad="fnOnload()">
+
+ </body>
+</html>

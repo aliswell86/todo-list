@@ -3,14 +3,19 @@ import PageTemplate from './PageTemplate';
 import TodoInput from './TodoInput';
 import TodoList from './TodoList';
 
+const initalTodos = new Array(500).fill(0).map(
+  (foo, index) => ({id: index, text: `일정 ${index}`, done: false})
+);
+
 class App extends React.Component {
 
   state = {
     input: "",
-    todos: [
-      {id :0, text: '리액트 공부하기', done: true},
-      {id :1, text: '컴포넌트 스타일링 해보기', done: false}
-    ]
+    todos: initalTodos
+    // [
+    //   {id :3, text: '리액트 공부하기', done: true},
+    //   {id :4, text: '컴포넌트 스타일링 해보기', done: false}
+    // ]
   }
 
   id = 1;
@@ -36,20 +41,61 @@ class App extends React.Component {
     this.setState({
       todos: [...todos, newTodo],
       input: ""
-    })
+    });
+  }
+
+  handleToggle = (id) => {
+    var {todos} = this.state;
+    const index = todos.findIndex(todo => todo.id === id);
+    const toggled = {
+      ...todos[index],
+      done: !todos[index].done
+    }
+
+    // var todos_copy = [];
+    // for(var i=0; i<todos.length; i++) {
+    //   if(i===index) {
+    //     todos_copy.push({id: todos[i].id, text: todos[i].text, done: !todos[i].done});
+    //   }else{
+    //     todos_copy.push(todos[i]);
+    //   }
+    // }
+
+    this.setState({
+      todos:
+      [
+        ...todos.slice(0,index),
+        toggled,
+        ...todos.slice(index + 1, todos.length)
+      ]
+    });
+  }
+
+  handleRemove = (id) => {
+    const {todos} = this.state;
+    const index = todos.findIndex(todo => todo.id === id);
+
+    this.setState({
+      todos: [
+        ...todos.slice(0,index),
+        ...todos.slice(index + 1,todos.length)
+      ]
+    });
   }
 
   render () {
     const {input, todos} = this.state;
     const {
       handleChange,
-      handleInsert
+      handleInsert,
+      handleToggle,
+      handleRemove
     } = this;
 
     return (
       <PageTemplate>
         <TodoInput onChange={handleChange} onInsert={handleInsert} value={input} />
-        <TodoList todos={todos} />
+        <TodoList todos={todos} onToggle={handleToggle} onRemove={handleRemove} />
       </PageTemplate>
     )
   }
