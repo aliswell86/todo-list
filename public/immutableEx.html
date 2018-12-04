@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="en">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="Generator" content="EditPlus®">
+  <meta name="Author" content="">
+  <meta name="Keywords" content="">
+  <meta name="Description" content="">
+  <title>Document</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/immutable/3.7.3/immutable.min.js"></script>
+  <script>
+    const fnOnload = () => {
+      const {Map, fromJS} = Immutable;
+      const {List} = Immutable;
+      const data = fromJS({
+        a: 1,
+        b: 2,
+        c: {
+          d: 3,
+          e: 4,
+          f: 5
+        }
+      });
+      const list = fromJS([
+        {value: 1},
+        {value: 2}
+      ])
+
+      const deserialized = data.toJS();
+      //data.get('a');
+      console.log(data.getIn(['c', 'e']));
+      const newData = data.set('a', 4);
+      const newData1 = data.setIn(['c', 'e'], 10);
+      const newData2 = data.mergeIn(['c'], {d: 10, f: 10});
+      const newData3 = newData2.merge({a: 10, b: 10});
+      console.log(newData3.toJS());
+
+      console.log(list.toJS());
+      console.log(list.getIn([1, 'value']));
+
+      const newList = list.set(0, Map({age: 10}));
+      const newList1 = list.setIn([1, 'value'], 10);
+      console.log(newList.toJS(), newList1.toJS());
+
+      const newList2 = list.update(0, item => item.set('value', item.get('value') * 5));
+      console.log(newList2.toJS());
+
+      const newList3 = list.push(Map({value: 3}));
+      const newList4 = list.unshift(Map({value: 3})); //맨앞에 추가
+      console.log(newList4.toJS());
+
+      const newList5 = newList3.delete(1);
+      const newList6 = newList3.pop();
+      console.log(newList5.toJS(), newList6.toJS());
+
+      // list.size //갯수
+      // list.isEmpty(); //존재여부
+      // 그외 https://facebook.github.io/immutable-js/
+    }
+  </script>
+ </head>
+ <body onLoad="fnOnload()">
+   test
+ </body>
+</html>
